@@ -250,19 +250,9 @@
       "id": "e14",
       "from": "n7",
       "to": "n11"
-    },
-    {
-      "id": "e22",
-      "from": "n11",
-      "to": "n12"
-    },
-    {
-      "id": "e23",
-      "from": "n12",
-      "to": "n13"
     }
   ],
-  "nid": 24,
+  "nid": 22,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
