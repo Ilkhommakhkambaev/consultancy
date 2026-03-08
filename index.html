@@ -469,9 +469,7 @@ body {
     Load from GitHub
   </button>
   <button class="btn" onclick="ghSettings()" title="GitHub settings" style="padding:6px 8px;">⚙</button>
-  <div id="toolbar-credit">
-    Developed and designed by: <a href="https://ilkhom-makhkambaev.mystrikingly.com/" target="_blank" rel="noopener" style="color:var(--accent); font-weight:700; text-decoration:none;">Ilkhom Makhkambaev</a>
-  </div>
+</div>
 </div>
 
 <!-- ── FORMAT PANEL (appears when a node is selected) ───────── -->
@@ -534,6 +532,11 @@ body {
   <button class="shape-btn node-only" id="shape-diamond" onclick="applyShape('diamond')" title="Diamond">
     <svg viewBox="0 0 18 18"><polygon points="9,1 17,9 9,17 1,9" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
   </button>
+</div>
+
+<!-- ── CREDIT ──────────────────────────────────────────────── -->
+<div style="position:fixed; bottom:14px; right:16px; font-size:11px; color:#aaa; font-family:'Nunito Sans',sans-serif; z-index:999; pointer-events:auto;">
+  Developed and designed by: <a href="https://ilkhom-makhkambaev.mystrikingly.com/" target="_blank" rel="noopener" style="color:#aaa; font-weight:700; text-decoration:none;">Ilkhom Makhkambaev</a>
 </div>
 
 <!-- ── NEW MAP MODAL ──────────────────────────────────────── -->
@@ -1884,11 +1887,49 @@ function loadMapFromFileInput(ev) {
 }
 
 // ── Drag-and-drop .json file onto the canvas to load it ──
-document.getElementById('wrap').addEventListener('dragover', e => e.preventDefault());
+document.getElementById('wrap').addEventListener('dragover', e => {
+  e.preventDefault();
+  // Show visual feedback when dragging files/folders over canvas
+  e.dataTransfer.dropEffect = 'copy';
+});
+
 document.getElementById('wrap').addEventListener('drop', e => {
   e.preventDefault();
-  const file = e.dataTransfer.files[0];
-  if (file && file.name.endsWith('.json')) loadMapFromFile(file);
+
+  const items = e.dataTransfer.items;
+  const files = e.dataTransfer.files;
+
+  // Calculate drop position on canvas accounting for pan and zoom
+  const wrap = document.getElementById('wrap');
+  const rect = wrap.getBoundingClientRect();
+  const dropX = (e.clientX - rect.left - S.tx) / S.zoom;
+  const dropY = (e.clientY - rect.top  - S.ty) / S.zoom;
+
+  // Case 1: dropped a .json map file - load it
+  if (files.length === 1 && files[0].name.endsWith('.json')) {
+    loadMapFromFile(files[0]);
+    return;
+  }
+
+  // Case 2: dropped files or folders from Windows Explorer
+  // Create one node per item, spread them out slightly so they don't stack
+  if (files.length > 0) {
+    let offset = 0;
+    Array.from(files).forEach(file => {
+      // Strip file extension for cleaner node text
+      // e.g. "072_Community_Resilience" stays as is, "report.docx" becomes "report"
+      const name = file.name.replace(/\.[^/.]+$/, '') || file.name;
+      const x = dropX + offset;
+      const y = dropY + offset;
+      addNode(x, y, name, 0, '', false);
+      offset += 30; // slight offset so multiple nodes don't perfectly overlap
+    });
+    if (files.length === 1) {
+      showToast('Node created: ' + files[0].name.replace(/\.[^/.]+$/, ''));
+    } else {
+      showToast(files.length + ' nodes created from dropped items');
+    }
+  }
 });
 
 // ── Right-click on empty canvas = option to load file ──
