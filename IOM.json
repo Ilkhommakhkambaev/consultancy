@@ -2,33 +2,14 @@
   "title": "My Mind Map",
   "nodes": [
     {
-      "id": "n1",
-      "x": 640,
-      "y": 244.5,
-      "w": 118,
-      "h": 36,
-      "text": "IOM",
+      "id": "n4",
+      "x": 572,
+      "y": 269,
+      "w": 250,
+      "h": 54,
+      "text": "074_IOM_MARKETING STRATEGY CONSULTANT",
       "ci": 2,
-      "link": "",
-      "collapsed": false,
-      "isNote": false,
-      "fontSize": 13,
-      "fontFamily": "Nunito",
-      "textColor": "",
-      "bold": false,
-      "italic": false,
-      "textAlign": "center",
-      "shape": "rounded"
-    },
-    {
-      "id": "n2",
-      "x": 833,
-      "y": 244.5,
-      "w": 0,
-      "h": 0,
-      "text": "New Node",
-      "ci": 0,
-      "link": "",
+      "link": "https://drive.google.com/drive/folders/1r34q3Wh4DS5s_SdJDbC4JgNFJJKNkL7Q?usp=drive_link",
       "collapsed": false,
       "isNote": false,
       "fontSize": 13,
@@ -37,17 +18,11 @@
       "bold": false,
       "italic": false,
       "textAlign": "left",
-      "shape": "rounded"
+      "shape": "circle"
     }
   ],
-  "edges": [
-    {
-      "id": "e3",
-      "from": "n2",
-      "to": "n1"
-    }
-  ],
-  "nid": 4,
+  "edges": [],
+  "nid": 5,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
