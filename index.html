@@ -305,7 +305,23 @@ body {
 }
 .node.selected .resize-handle { display: block; }
 
-.btn.orange { color: #e07b3a; border-color: #e07b3a; }
+/* drag-to-connect handle - small circle on right edge, appears on hover */
+.conn-handle {
+  position: absolute; right: -11px; top: 50%; transform: translateY(-50%);
+  width: 14px; height: 14px;
+  background: #e07b3a; border: 2px solid #fff;
+  border-radius: 50%; cursor: crosshair;
+  z-index: 60; display: none;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+.node:hover .conn-handle,
+.node.selected .conn-handle { display: block; }
+
+/* highlight when a drag-to-connect line is hovering over a target node */
+.node.conn-target {
+  outline: 2px dashed #e07b3a;
+  outline-offset: 3px;
+}
 .btn.orange:hover, .btn.orange.active { background: #e07b3a; color: #fff; }
 
 /* floating X delete on selected node */
@@ -846,7 +862,13 @@ function buildNode(id) {
   rsz.addEventListener('mousedown', e => { e.stopPropagation(); beginResize(e, id); });
   el.appendChild(rsz);
 
-  // ── Drive icon (right side, always visible when link exists) ──
+  // ── Drag-to-connect handle (right edge, appears on hover) ──
+  // Grab this dot and drag to any other node to create a connection instantly.
+  const connHandle = document.createElement('div');
+  connHandle.className = 'conn-handle';
+  connHandle.title = 'Drag to connect to another node';
+  connHandle.addEventListener('mousedown', e => { e.stopPropagation(); beginDragConnect(e, id); });
+  el.appendChild(connHandle);
   if (n.link) {
     const a = document.createElement('a');
     a.className = 'drive-icon';
@@ -1663,6 +1685,101 @@ function handleConnClick(id) {
   cancelConn();
 }
 
+// ────────────────────────────────────────────────────────
+//  DRAG-TO-CONNECT
+//  Grab the orange dot on the right edge of any node,
+//  drag to another node, release to create a connection.
+//  A live SVG line follows the mouse while dragging.
+// ────────────────────────────────────────────────────────
+
+function beginDragConnect(e, fromId) {
+  e.preventDefault();
+
+  // Create a temporary SVG line that follows the mouse
+  const rubber = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  rubber.setAttribute('stroke', '#e07b3a');
+  rubber.setAttribute('stroke-width', '2');
+  rubber.setAttribute('stroke-dasharray', '6,4');
+  rubber.setAttribute('pointer-events', 'none');
+  svgEl.appendChild(rubber);
+
+  // Starting point - center of the source node
+  const fromEl = document.getElementById(fromId);
+
+  function getNodeCenter(el) {
+    const wrapRect = document.getElementById('wrap').getBoundingClientRect();
+    const r = el.getBoundingClientRect();
+    return {
+      x: (r.left + r.width / 2  - wrapRect.left - S.tx) / S.zoom,
+      y: (r.top  + r.height / 2 - wrapRect.top  - S.ty) / S.zoom
+    };
+  }
+
+  const src = getNodeCenter(fromEl);
+  rubber.setAttribute('x1', src.x);
+  rubber.setAttribute('y1', src.y);
+  rubber.setAttribute('x2', src.x);
+  rubber.setAttribute('y2', src.y);
+
+  // Track which node the mouse is hovering over as a target
+  let hoveredTarget = null;
+
+  function onMove(ev) {
+    const wrapRect = document.getElementById('wrap').getBoundingClientRect();
+    const mx = (ev.clientX - wrapRect.left - S.tx) / S.zoom;
+    const my = (ev.clientY - wrapRect.top  - S.ty) / S.zoom;
+    rubber.setAttribute('x2', mx);
+    rubber.setAttribute('y2', my);
+
+    // Highlight whichever node the cursor is over (excluding source)
+    const el = document.elementFromPoint(ev.clientX, ev.clientY);
+    const nodeEl = el?.closest('.node');
+    if (nodeEl && nodeEl.id !== fromId) {
+      if (hoveredTarget !== nodeEl.id) {
+        // Remove highlight from previous target
+        if (hoveredTarget) document.getElementById(hoveredTarget)?.classList.remove('conn-target');
+        hoveredTarget = nodeEl.id;
+        nodeEl.classList.add('conn-target');
+      }
+    } else {
+      if (hoveredTarget) document.getElementById(hoveredTarget)?.classList.remove('conn-target');
+      hoveredTarget = null;
+    }
+  }
+
+  function onUp(ev) {
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseup',   onUp);
+    rubber.remove();
+
+    // Clear any hover highlight
+    if (hoveredTarget) document.getElementById(hoveredTarget)?.classList.remove('conn-target');
+
+    // Find what node was released on
+    const el = document.elementFromPoint(ev.clientX, ev.clientY);
+    const nodeEl = el?.closest('.node');
+    if (nodeEl && nodeEl.id !== fromId) {
+      const toId = nodeEl.id;
+      const already = S.edges.some(ed =>
+        (ed.from === fromId && ed.to === toId) ||
+        (ed.from === toId   && ed.to === fromId));
+      if (!already) {
+        pushUndo();
+        S.edges.push({ id: 'e' + (S.nid++), from: fromId, to: toId });
+        buildNode(fromId);
+        drawEdges();
+        autoSave();
+        showToast('Connected!');
+      } else {
+        showToast('Already connected');
+      }
+    }
+  }
+
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseup',   onUp);
+}
+
 function cancelConn() {
   if (S.conn.src) document.getElementById(S.conn.src)?.classList.remove('conn-src');
   S.conn = { on: false, src: null };
@@ -2404,6 +2521,19 @@ window.addEventListener('paste', e => {
   autoSave();
   showToast('Link added to node');
 });
+
+// ── Auto-save to GitHub every 5 minutes ──
+// Only runs if a file is already loaded/named (S.currentFile is set).
+// Silently saves in background - shows a small toast so you know it happened.
+setInterval(() => {
+  if (S.currentFile && S.nodes.length > 0 && ghReady()) {
+    ghSaveFile(S.currentFile).then(() => {
+      showToast('Auto-saved: ' + S.currentFile);
+    }).catch(() => {
+      // Fail silently - don't interrupt work with error popups
+    });
+  }
+}, 5 * 60 * 1000); // 5 minutes in milliseconds
 
 // ── START ──
 init();
