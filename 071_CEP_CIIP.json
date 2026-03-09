@@ -145,7 +145,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -166,7 +166,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -187,7 +187,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -208,7 +208,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -271,7 +271,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -292,7 +292,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -313,7 +313,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -334,13 +334,13 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
       "id": "n30",
       "x": 1788.1946944146096,
-      "y": -96.16974521469471,
+      "y": -97.66201957219195,
       "w": 0,
       "h": 0,
       "text": "03_Conf_6_March_2026",
@@ -355,7 +355,7 @@
       "italic": false,
       "textAlign": "left",
       "shape": "rounded",
-      "borderColor": "",
+      "borderColor": "#002fff",
       "borderWidth": 0
     },
     {
@@ -486,8 +486,8 @@
     },
     {
       "id": "n43",
-      "x": 1239.2763229902819,
-      "y": 594.2270107433076,
+      "x": 1469.4455999205165,
+      "y": 602.0736906386564,
       "w": 0,
       "h": 0,
       "text": "03_Materials",
