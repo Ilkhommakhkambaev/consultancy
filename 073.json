@@ -1,5 +1,5 @@
 {
-  "title": "073",
+  "title": "",
   "nodes": [
     {
       "id": "n1",
@@ -63,10 +63,31 @@
       "shape": "rounded",
       "borderColor": "#21c066",
       "borderWidth": 2.5
+    },
+    {
+      "id": "n4",
+      "x": 273.88172108639947,
+      "y": 106.98925387474799,
+      "w": 0,
+      "h": 0,
+      "text": "New Node",
+      "ci": 0,
+      "link": "",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
     }
   ],
   "edges": [],
-  "nid": 4,
+  "nid": 5,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
