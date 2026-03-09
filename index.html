@@ -353,9 +353,9 @@ body {
   display: none;
 }
 .node.multi-selected {
-  border-color: #3a3a3a;
-  box-shadow: 0 0 0 3px rgba(50,50,50,0.25), var(--shadow);
-  background-image: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04));
+  border-color: #3a3a3a !important;
+  box-shadow: 0 0 0 3px rgba(50,50,50,0.25), var(--shadow) !important;
+  background-image: linear-gradient(rgba(0,0,0,0.04), rgba(0,0,0,0.04)) !important;
 }
 
 #ctx {
@@ -906,9 +906,17 @@ function buildNode(id) {
 
     if (e.ctrlKey || e.metaKey) {
       // Ctrl+click: toggle this node in/out of multi-selection
-      // Clear any single selection first
-      document.querySelectorAll('.node.selected').forEach(el => el.classList.remove('selected'));
-      S.sel = null;
+      // If there's a single-selected node, migrate it into selSet first
+      if (S.sel) {
+        const prevId = S.sel;
+        const prevEl = document.getElementById(prevId);
+        if (prevEl) {
+          prevEl.classList.remove('selected');
+          prevEl.classList.add('multi-selected');
+        }
+        S.selSet.add(prevId);
+        S.sel = null;
+      }
 
       if (S.selSet.has(id)) {
         // Already in selection - remove it
@@ -919,7 +927,7 @@ function buildNode(id) {
         S.selSet.add(id);
         el.classList.add('multi-selected');
       }
-      // Show format panel for batch editing if multiple nodes selected
+      // Show format panel for batch editing
       if (S.selSet.size > 1) {
         showMultiSelectPanel();
       } else if (S.selSet.size === 1) {
@@ -1540,17 +1548,15 @@ document.getElementById('wrap').addEventListener('mousedown', e => {
   if (e.button === 0 && (e.target === cvs || e.target === svgEl || e.target.closest('#empty-hint') || e.target.id === 'sel-rect')) {
     hideCtxMenu();
 
-    if (!spaceHeld && (e.ctrlKey || e.metaKey)) {
-      // Ctrl+drag: start rubber band selection (keep existing multi-sel)
-      select(null); // clear single selection
+    if (!spaceHeld) {
+      // Left-click drag on empty canvas: start rubber band selection
+      e.preventDefault();
+      select(null);
+      clearMultiSel();
       const r  = cvs.getBoundingClientRect();
       const sx = (e.clientX - r.left) / S.zoom;
       const sy = (e.clientY - r.top)  / S.zoom;
-      S.rubber = { sx, sy, preSelected: new Set(S.selSet) };
-    } else if (!spaceHeld) {
-      // Normal click on empty canvas: deselect all
-      select(null);
-      clearMultiSel();
+      S.rubber = { sx, sy, preSelected: new Set() };
     }
   }
   if (e.button === 1 || (e.button === 0 && spaceHeld)) {
