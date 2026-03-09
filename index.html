@@ -1084,26 +1084,39 @@ function clearMultiSel() {
 // ────────────────────────────────────────────────────────
 
 function applyFmt() {
-  const id = S.sel;
-  if (!id) return;
-  const n = S.nodes.find(n => n.id === id);
-  if (!n) return;
+  const fontFamily = document.getElementById('fmt-font').value;
+  const fontSize   = parseFloat(document.getElementById('fmt-size').value) || 13;
+  const textColor  = document.getElementById('fmt-color').value;
+  const bold       = document.getElementById('fmt-bold').classList.contains('on');
+  const italic     = document.getElementById('fmt-italic').classList.contains('on');
 
-  n.fontFamily = document.getElementById('fmt-font').value;
-  n.fontSize   = parseFloat(document.getElementById('fmt-size').value) || 13;
-  n.textColor  = document.getElementById('fmt-color').value;
-  n.bold       = document.getElementById('fmt-bold').classList.contains('on');
-  n.italic     = document.getElementById('fmt-italic').classList.contains('on');
+  // Collect targets: all multi-selected nodes, or just the single selected one
+  const targetIds = S.selSet.size > 1
+    ? [...S.selSet]
+    : (S.sel ? [S.sel] : []);
 
-  // Apply live to label without full rebuild (no flicker)
-  const lbl = document.querySelector(`#${id} .node-label`);
-  if (lbl) {
-    lbl.style.fontSize   = n.fontSize + 'px';
-    lbl.style.fontFamily = n.fontFamily;
-    lbl.style.color      = n.textColor || '';
-    lbl.style.fontWeight = n.bold   ? '800' : '';
-    lbl.style.fontStyle  = n.italic ? 'italic' : '';
-  }
+  if (targetIds.length === 0) return;
+
+  targetIds.forEach(id => {
+    const n = S.nodes.find(n => n.id === id);
+    if (!n) return;
+    n.fontFamily = fontFamily;
+    n.fontSize   = fontSize;
+    n.textColor  = textColor;
+    n.bold       = bold;
+    n.italic     = italic;
+
+    // Apply live to label without full rebuild (no flicker)
+    const lbl = document.querySelector(`#${id} .node-label`);
+    if (lbl) {
+      lbl.style.fontSize   = fontSize + 'px';
+      lbl.style.fontFamily = fontFamily;
+      lbl.style.color      = textColor || '';
+      lbl.style.fontWeight = bold   ? '800' : '';
+      lbl.style.fontStyle  = italic ? 'italic' : '';
+    }
+  });
+
   autoSave();
 }
 
@@ -2119,6 +2132,7 @@ function clearSilent() {
   S.selSet.clear();
   S.conn  = { on: false, src: null };
   S.currentFile = null; // reset so next save asks for filename
+  localStorage.removeItem('mmCurrentFile');
   svgEl.querySelectorAll('.edge, .edot, .edge-label-text').forEach(el => el.remove());
   updateHint();
   localStorage.removeItem('mmdata');
@@ -2302,7 +2316,11 @@ async function ghLoadFile(filename, sha) {
     clearSilent();
     restore(json);
     S.currentFile = filename;
-    showToast('Loaded: ' + filename.replace('.json','') + ' from GitHub');
+    localStorage.setItem('mmCurrentFile', filename); // survive page refresh
+    // Update toolbar title to match the loaded filename
+    const displayName = filename.replace('.json', '').replace(/_/g, ' ');
+    document.getElementById('map-title').value = displayName;
+    showToast('Loaded: ' + displayName + ' from GitHub');
   } catch(err) {
     ghSetStatus('Error loading file: ' + err.message, 'red');
   }
@@ -2375,6 +2393,7 @@ async function ghSaveFile(filename) {
 
     ghCloseModal();
     S.currentFile = filename; // remember for next save
+    localStorage.setItem('mmCurrentFile', filename); // survive page refresh
     showToast('Saved to GitHub: ' + filename);
   } catch(err) {
     ghSetStatus('Error: ' + err.message, 'red');
@@ -2523,6 +2542,8 @@ window.addEventListener('paste', e => {
 });
 
 // ── START ──
+// Restore last open filename so save works immediately after refresh
+S.currentFile = localStorage.getItem('mmCurrentFile') || null;
 init();
 </script>
 </body>
