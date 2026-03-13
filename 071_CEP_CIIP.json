@@ -507,13 +507,13 @@
     },
     {
       "id": "n48",
-      "x": 443.5312041230815,
-      "y": 156.36116862191025,
+      "x": 436.88338259681217,
+      "y": 136.4177040431023,
       "w": 0,
       "h": 0,
-      "text": "New Node",
+      "text": "TJ_FRLD Proposal",
       "ci": 0,
-      "link": "",
+      "link": "https://drive.google.com/drive/folders/1wYtRnFQhGQBlQAgpgt-G0EVzajtxs8iY?usp=drive_link",
       "collapsed": false,
       "isNote": false,
       "fontSize": 13,
@@ -642,9 +642,15 @@
       "id": "e47",
       "from": "n36",
       "to": "n43"
+    },
+    {
+      "id": "e49",
+      "from": "n48",
+      "to": "n2",
+      "thickness": 4.5
     }
   ],
-  "nid": 49,
+  "nid": 50,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
