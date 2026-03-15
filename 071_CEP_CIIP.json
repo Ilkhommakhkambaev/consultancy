@@ -409,7 +409,7 @@
       "text": "01_PROJECT_FOUNDATION",
       "ci": 5,
       "link": "https://drive.google.com/drive/folders/1g81TK1P17JG9kfRe93dh9GdNOY07iXIk?usp=drive_link",
-      "collapsed": false,
+      "collapsed": true,
       "isNote": false,
       "fontSize": 14,
       "fontFamily": "Nunito",
@@ -514,6 +514,27 @@
       "text": "TJ_FRLD Proposal",
       "ci": 0,
       "link": "https://drive.google.com/drive/folders/1wYtRnFQhGQBlQAgpgt-G0EVzajtxs8iY?usp=drive_link",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
+    },
+    {
+      "id": "n53",
+      "x": 1297,
+      "y": 858,
+      "w": 0,
+      "h": 0,
+      "text": "TJ_FRLD Proposal",
+      "ci": 0,
+      "link": "",
       "collapsed": false,
       "isNote": false,
       "fontSize": 13,
@@ -648,9 +669,14 @@
       "from": "n48",
       "to": "n2",
       "thickness": 4.5
+    },
+    {
+      "id": "e54",
+      "from": "n14",
+      "to": "n53"
     }
   ],
-  "nid": 53,
+  "nid": 55,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
