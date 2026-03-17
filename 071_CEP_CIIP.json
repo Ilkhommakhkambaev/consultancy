@@ -360,14 +360,14 @@
     },
     {
       "id": "n34",
-      "x": 1046,
-      "y": 370,
+      "x": 1000.2381628503251,
+      "y": 511.86169516399195,
       "w": 0,
       "h": 0,
       "text": "02_ADMINISTRATION_MGT",
       "ci": 5,
       "link": "https://drive.google.com/drive/folders/1ZrS8cjmDCJKICiS0llPIcEtiWrUkiJfn?usp=drive_link",
-      "collapsed": true,
+      "collapsed": false,
       "isNote": false,
       "fontSize": 14,
       "fontFamily": "Nunito",
@@ -381,8 +381,8 @@
     },
     {
       "id": "n35",
-      "x": 1376,
-      "y": 370,
+      "x": 1287.5271148439622,
+      "y": 517.9632734506155,
       "w": 0,
       "h": 0,
       "text": "03_DELIVERABLES",
@@ -423,8 +423,8 @@
     },
     {
       "id": "n40",
-      "x": 1046,
-      "y": 463,
+      "x": 771.4289771019509,
+      "y": 851.9756157722361,
       "w": 0,
       "h": 0,
       "text": "00_TOR",
@@ -444,8 +444,8 @@
     },
     {
       "id": "n41",
-      "x": 1046,
-      "y": 535,
+      "x": 663.1259625143871,
+      "y": 670.7601168773687,
       "w": 0,
       "h": 0,
       "text": "01_Agreement_Contract",
@@ -465,8 +465,8 @@
     },
     {
       "id": "n42",
-      "x": 1046,
-      "y": 607,
+      "x": 858.3764676863331,
+      "y": 793.098137742011,
       "w": 0,
       "h": 0,
       "text": "02_Project_Documents",
@@ -486,8 +486,8 @@
     },
     {
       "id": "n43",
-      "x": 1046,
-      "y": 679,
+      "x": 414.4866473344872,
+      "y": 755.2697285827915,
       "w": 0,
       "h": 0,
       "text": "03_Materials",
@@ -535,6 +535,27 @@
       "text": "01_Ilkhom_Materials",
       "ci": 0,
       "link": "https://drive.google.com/drive/folders/1yUA8PqCz-8pUo3SMM7D8sDRE5OyRNqRI?usp=drive_link",
+      "collapsed": false,
+      "isNote": false,
+      "fontSize": 13,
+      "fontFamily": "Nunito",
+      "textColor": "",
+      "bold": false,
+      "italic": false,
+      "textAlign": "left",
+      "shape": "rounded",
+      "borderColor": "",
+      "borderWidth": 0
+    },
+    {
+      "id": "n58",
+      "x": 1550.5271148439622,
+      "y": 517.9632734506155,
+      "w": 0,
+      "h": 0,
+      "text": "New Node",
+      "ci": 5,
+      "link": "",
       "collapsed": false,
       "isNote": false,
       "fontSize": 13,
@@ -640,11 +661,6 @@
       "to": "n34"
     },
     {
-      "id": "e39",
-      "from": "n34",
-      "to": "n35"
-    },
-    {
       "id": "e44",
       "from": "n36",
       "to": "n40"
@@ -675,9 +691,19 @@
       "id": "e54",
       "from": "n48",
       "to": "n53"
+    },
+    {
+      "id": "e57",
+      "from": "n34",
+      "to": "n35"
+    },
+    {
+      "id": "e59",
+      "from": "n35",
+      "to": "n58"
     }
   ],
-  "nid": 57,
+  "nid": 60,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
