@@ -507,8 +507,8 @@
     },
     {
       "id": "n48",
-      "x": -61.736047644329346,
-      "y": 433.8788744896183,
+      "x": -60.57984461507741,
+      "y": 435.0350775188702,
       "w": 0,
       "h": 0,
       "text": "TJ_FRLD Proposal",
@@ -528,13 +528,13 @@
     },
     {
       "id": "n53",
-      "x": -175.27933865186696,
-      "y": 579.4756619262341,
+      "x": -303.61787489883193,
+      "y": 392.17077118742037,
       "w": 0,
       "h": 0,
-      "text": "New Node",
+      "text": "01_Ilkhom_Materials",
       "ci": 0,
-      "link": "",
+      "link": "https://drive.google.com/drive/folders/1yUA8PqCz-8pUo3SMM7D8sDRE5OyRNqRI?usp=drive_link",
       "collapsed": false,
       "isNote": false,
       "fontSize": 13,
@@ -669,9 +669,14 @@
       "from": "n48",
       "to": "n2",
       "thickness": 4.5
+    },
+    {
+      "id": "e54",
+      "from": "n48",
+      "to": "n53"
     }
   ],
-  "nid": 54,
+  "nid": 55,
   "edgeThickness": 2,
   "edgeColor": "#b8b0a6"
 }
