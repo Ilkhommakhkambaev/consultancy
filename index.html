@@ -877,6 +877,7 @@ function escHtml(s) {
 }
 
 async function homeNewMap() {
+  if (homeNewMap._busy) return; // prevent double-click
   if (!ghReady()) {
     showToast('Please configure GitHub settings first.');
     ghSettings();
@@ -889,9 +890,6 @@ async function homeNewMap() {
   const safeName = trimmed.replace(/[^a-zA-Z0-9_\-\s]/g, '').replace(/\s+/g, '_');
   const filename = (safeName || 'New_Map') + '.json';
 
-  clearSilent();
-  document.getElementById('map-title').value = trimmed;
-
   // Create initial empty map data
   const mapData = {
     title: trimmed,
@@ -903,6 +901,7 @@ async function homeNewMap() {
 
   const list = document.getElementById('home-list');
   list.innerHTML = '<div id="home-empty">Creating ' + escHtml(filename) + '...</div>';
+  homeNewMap._busy = true;
 
   try {
     const { user, repo, token } = ghCreds();
@@ -925,6 +924,9 @@ async function homeNewMap() {
       const err = await res.json();
       throw new Error(err.message || 'Failed to create file');
     }
+    // SUCCESS — only now clear the canvas and switch to the new map
+    clearSilent();
+    document.getElementById('map-title').value = trimmed;
     S.currentFile = filename;
     localStorage.setItem('mmCurrentFile', filename);
     hideHomeScreen();
@@ -933,6 +935,8 @@ async function homeNewMap() {
   } catch(e) {
     showToast('Error: ' + e.message);
     renderHomeList();
+  } finally {
+    homeNewMap._busy = false;
   }
 }
 
